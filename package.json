@@ -1,0 +1,16 @@
+{
+  "name": "homecam-cloud",
+  "version": "1.0.0",
+  "description": "نظام المراقبة المنزلي عبر الإنترنت",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "ws": "^8.21.0"
+  }
+}

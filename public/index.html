@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b0e14">
+<title>HomeCam</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0b0e14;--bg2:#13171f;--bg3:#1c2130;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --accent:#3b7eff;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
+  --text:#e8eaf0;--muted:#6b7280;--radius:14px;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden}
+
+/* ── SCREENS ── */
+.screen{display:none;height:100dvh;flex-direction:column;overflow:hidden}
+.screen.active{display:flex}
+
+/* ── SPLASH ── */
+#splash{align-items:center;justify-content:center;gap:0;padding:2rem}
+.logo-wrap{margin-bottom:1.5rem;text-align:center}
+.logo-icon{font-size:56px;display:block;margin-bottom:4px}
+.logo-name{font-size:26px;font-weight:700;letter-spacing:-0.5px}
+.logo-sub{font-size:13px;color:var(--muted);margin-top:2px}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;width:100%;max-width:360px;margin-bottom:12px}
+.card-title{font-size:12px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;padding:11px 14px;outline:none;transition:border .2s}
+.inp:focus{border-color:var(--accent)}
+.inp::placeholder{color:var(--muted)}
+.inp-row{display:flex;gap:8px;margin-top:8px}
+.inp-sm{flex:1}
+
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:0}
+.role-btn{background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;color:var(--text);padding:16px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all .2s;font-size:13px;font-weight:600}
+.role-btn:active{transform:scale(.97)}
+.role-btn.camera:hover,.role-btn.camera:focus{border-color:var(--accent);background:rgba(59,126,255,.08)}
+.role-btn.viewer:hover,.role-btn.viewer:focus{border-color:var(--green);background:rgba(34,197,94,.08)}
+.role-icon{font-size:30px}
+.role-desc{font-size:11px;color:var(--muted);font-weight:400;text-align:center}
+
+.status-pill{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);justify-content:center;margin-top:16px;min-height:20px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.dot.green{background:var(--green);animation:blink 1.4s infinite}
+.dot.red{background:var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── CAMERA ── */
+#camera{position:relative;background:#000}
+#cam-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cam-ui{position:absolute;inset:0;display:flex;flex-direction:column;pointer-events:none}
+.cam-top{padding:env(safe-area-inset-top,16px) 16px 0;display:flex;align-items:flex-start;justify-content:space-between;background:linear-gradient(to bottom,rgba(0,0,0,.65) 0%,transparent 100%);padding-bottom:20px;pointer-events:all}
+.cam-badge{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);border-radius:999px;padding:6px 14px;font-size:13px;color:#fff;display:flex;align-items:center;gap:7px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1s infinite;flex-shrink:0}
+.cam-info{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.viewer-pill{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);border-radius:999px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75)}
+.conn-pill{border-radius:999px;padding:5px 12px;font-size:11px;font-weight:600}
+.conn-ok{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.3);color:var(--green)}
+.conn-no{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.3);color:var(--red)}
+.cam-center{flex:1}
+.cam-bottom{padding:0 16px calc(env(safe-area-inset-bottom,16px) + 16px);background:linear-gradient(to top,rgba(0,0,0,.65) 0%,transparent 100%);padding-top:30px;pointer-events:all}
+.cam-controls{display:flex;gap:10px;justify-content:center;align-items:center;margin-bottom:10px}
+.ctrl-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(10px);border-radius:12px;color:#fff;padding:12px 18px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;transition:all .15s}
+.ctrl-btn:active{transform:scale(.95);background:rgba(255,255,255,.2)}
+.ctrl-btn.danger{border-color:rgba(239,68,68,.5);color:var(--red)}
+.cam-status-txt{text-align:center;font-size:11px;color:rgba(255,255,255,.45);margin-top:4px}
+
+/* ── VIEWER ── */
+#viewer{background:var(--bg);overflow:hidden}
+.v-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,12px) + 12px) 16px 12px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.v-title{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
+.v-title-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
+.v-actions{display:flex;gap:8px}
+.hdr-btn{background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:12px;padding:7px 12px;cursor:pointer;display:flex;align-items:center;gap:5px}
+.hdr-btn:active{transform:scale(.97)}
+
+.v-body{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:12px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+@media(max-width:500px){.grid{grid-template-columns:1fr 1fr;gap:8px}}
+
+.cam-tile{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color .2s;position:relative}
+.cam-tile:active{transform:scale(.99)}
+.cam-tile:hover{border-color:var(--border2)}
+.tile-video-wrap{position:relative;background:#000;aspect-ratio:16/9}
+.tile-video-wrap video{width:100%;height:100%;object-fit:cover;display:block}
+.tile-motion{position:absolute;top:7px;left:7px;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;display:none}
+.tile-motion.show{display:block}
+.tile-fs{position:absolute;bottom:7px;right:7px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:11px;padding:4px 10px;border-radius:8px;opacity:0;transition:opacity .2s}
+.cam-tile:hover .tile-fs{opacity:1}
+.tile-footer{padding:9px 12px;display:flex;align-items:center;justify-content:space-between}
+.tile-name{font-size:13px;font-weight:500}
+.tile-badge{font-size:10px;padding:3px 9px;border-radius:999px;font-weight:600}
+.b-live{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.b-conn{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+.b-off{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border)}
+
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px;opacity:.5}
+.empty-icon{font-size:48px}
+.empty-txt{font-size:14px;color:var(--muted);text-align:center;line-height:1.6}
+
+.log-section{flex-shrink:0;border-top:1px solid var(--border);padding:10px 12px 12px}
+.log-hdr{font-size:11px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.log-body{max-height:100px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.log-row{display:flex;gap:10px;font-size:11px;padding:3px 0;border-bottom:1px solid var(--border)}
+.log-row:last-child{border:none}
+.log-t{color:var(--accent);min-width:65px}
+.log-empty-txt{font-size:11px;color:var(--muted);text-align:center;padding:8px}
+
+/* ── FULLSCREEN ── */
+#fs{position:fixed;inset:0;background:#000;z-index:1000;display:none;flex-direction:column}
+#fs.active{display:flex}
+#fs-video{flex:1;width:100%;object-fit:contain}
+.fs-bar{flex-shrink:0;padding:12px 16px calc(env(safe-area-inset-bottom,12px) + 12px);background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:space-between}
+.fs-name{font-size:14px;font-weight:600}
+.fs-close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;cursor:pointer}
+
+/* ── INSTALL BANNER ── */
+#install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--bg2);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 12px);flex-direction:row;align-items:center;gap:12px}
+#install-banner.show{display:flex}
+.install-txt{flex:1;font-size:13px;color:var(--text)}
+.install-txt span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.install-btn{background:var(--accent);border:none;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.install-x{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:9px 20px;border-radius:999px;font-size:13px;opacity:0;transition:all .25s;z-index:9999;white-space:nowrap;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ═══ SPLASH ═══ -->
+<div id="splash" class="screen active">
+  <div class="logo-wrap">
+    <span class="logo-icon">📷</span>
+    <div class="logo-name">HomeCam</div>
+    <div class="logo-sub">نظام المراقبة عبر الإنترنت</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">معلومات الجهاز</div>
+    <input id="inp-name" class="inp" placeholder="اسم الجهاز (مثال: غرفة المعيشة)" maxlength="30">
+    <div class="inp-row">
+      <input id="inp-room" class="inp inp-sm" placeholder="رمز الغرفة (مشترك بين أجهزتك)" maxlength="20">
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:0">
+    <div class="card-title">اختر دور هذا الجهاز</div>
+    <div class="role-grid">
+      <button class="role-btn camera" onclick="join('camera')">
+        <span class="role-icon">📸</span>
+        <span>كاميرا</span>
+        <span class="role-desc">يبث الفيديو للمراقبة</span>
+      </button>
+      <button class="role-btn viewer" onclick="join('viewer')">
+        <span class="role-icon">🖥️</span>
+        <span>مراقبة</span>
+        <span class="role-desc">يشاهد جميع الكاميرات</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="status-pill" id="splash-status">
+    <div class="dot" id="splash-dot"></div>
+    <span id="splash-txt">جاهز للاتصال</span>
+  </div>
+</div>
+
+<!-- ═══ CAMERA ═══ -->
+<div id="camera" class="screen">
+  <video id="cam-video" autoplay muted playsinline></video>
+  <div class="cam-ui">
+    <div class="cam-top">
+      <div class="cam-badge">
+        <div class="live-dot"></div>
+        <span id="cam-name-lbl">الكاميرا</span>
+      </div>
+      <div class="cam-info">
+        <div class="viewer-pill" id="viewers-lbl">0 مشاهد</div>
+        <div class="conn-pill conn-no" id="conn-pill">غير متصل</div>
+      </div>
+    </div>
+    <div class="cam-center"></div>
+    <div class="cam-bottom">
+      <div class="cam-controls">
+        <button class="ctrl-btn" onclick="flipCam()">🔄 قلب</button>
+        <button class="ctrl-btn" onclick="toggleTorch()" id="torch-btn">🔦 فلاش</button>
+        <button class="ctrl-btn danger" onclick="leave()">← خروج</button>
+      </div>
+      <div class="cam-status-txt" id="cam-status-txt">جاري الاتصال...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIEWER ═══ -->
+<div id="viewer" class="screen">
+  <div class="v-header">
+    <div class="v-title">
+      <div class="v-title-dot" id="v-dot" style="background:var(--muted);animation:none"></div>
+      لوحة المراقبة
+    </div>
+    <div class="v-actions">
+      <button class="hdr-btn" id="cam-count-btn">0 كاميرا</button>
+      <button class="hdr-btn" onclick="copyLink()">🔗 رابط</button>
+      <button class="hdr-btn" onclick="leave()">← خروج</button>
+    </div>
+  </div>
+
+  <div class="v-body">
+    <div class="grid" id="cams-grid">
+      <div class="empty" id="empty-state">
+        <div class="empty-icon">📡</div>
+        <div class="empty-txt">في انتظار الكاميرات...<br>افتح الرابط على هاتف آخر واختر "كاميرا"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="log-hdr">📋 سجل الحركة</div>
+    <div class="log-body" id="motion-log">
+      <div class="log-empty-txt">لا أحداث بعد</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FULLSCREEN ═══ -->
+<div id="fs">
+  <video id="fs-video" autoplay playsinline></video>
+  <div class="fs-bar">
+    <div class="fs-name" id="fs-name"></div>
+    <button class="fs-close" onclick="closeFs()">✕ إغلاق</button>
+  </div>
+</div>
+
+<!-- ═══ INSTALL BANNER ═══ -->
+<div id="install-banner">
+  <div class="install-txt">
+    ثبّت HomeCam على هاتفك
+    <span>يعمل كتطبيق حقيقي بدون متصفح</span>
+  </div>
+  <button class="install-btn" onclick="installApp()">تثبيت</button>
+  <button class="install-x" onclick="dismissInstall()">✕</button>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ──
+// REPLACE THIS after deploying to Railway:
+const WS_URL = location.protocol === 'https:'
+  ? 'wss://' + location.host
+  : 'ws://' + location.host;
+
+// Free STUN servers + free TURN via OpenRelay
+const ICE_SERVERS = [
+  { urls: 'stun:stun.l.google.com:19302' },
+  { urls: 'stun:stun1.l.google.com:19302' },
+  { urls: 'stun:openrelay.metered.ca:80' },
+  {
+    urls: 'turn:openrelay.metered.ca:80',
+    username: 'openrelayproject',
+    credential: 'openrelayproject'
+  },
+  {
+    urls: 'turn:openrelay.metered.ca:443',
+    username: 'openrelayproject',
+    credential: 'openrelayproject'
+  }
+];
+
+// ── STATE ──
+let ws, myId, myRole, myName, myRoom;
+let localStream = null, facing = 'environment', torchOn = false;
+const peers = {};
+const tiles = {};
+const motionTimers = {};
+let installPrompt = null;
+let reconnectTimer = null;
+
+// ── PWA ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  installPrompt = e;
+  if (localStorage.getItem('install-dismissed') !== '1') {
+    document.getElementById('install-banner').classList.add('show');
+  }
+});
+function installApp() {
+  if (installPrompt) { installPrompt.prompt(); installPrompt = null; }
+  document.getElementById('install-banner').classList.remove('show');
+}
+function dismissInstall() {
+  localStorage.setItem('install-dismissed', '1');
+  document.getElementById('install-banner').classList.remove('show');
+}
+
+// ── KEEP SCREEN ON ──
+let wakeLock = null;
+async function keepAwake() {
+  try {
+    if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen');
+  } catch {}
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && myRole === 'camera') keepAwake();
+});
+
+// ── JOIN ──
+async function join(role) {
+  const name = document.getElementById('inp-name').value.trim() || (role === 'camera' ? 'كاميرا' : 'مراقبة');
+  const room = document.getElementById('inp-room').value.trim() || 'default';
+  myRole = role; myName = name; myRoom = room;
+
+  setSplashStatus('connecting', 'جاري الاتصال...');
+
+  if (role === 'camera') {
+    await startStream();
+    showScreen('camera');
+    document.getElementById('cam-name-lbl').textContent = name;
+    keepAwake();
+  } else {
+    showScreen('viewer');
+  }
+
+  connectWS();
+}
+
+// ── WEBSOCKET ──
+function connectWS() {
+  if (ws) { try { ws.close(); } catch {} }
+  ws = new WebSocket(WS_URL);
+
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ type: 'register', role: myRole, name: myName, room: myRoom }));
+    if (myRole === 'camera') setCamStatus(true);
+  };
+
+  ws.onmessage = e => handleMsg(JSON.parse(e.data));
+
+  ws.onclose = () => {
+    if (myRole === 'camera') setCamStatus(false);
+    clearTimeout(reconnectTimer);
+    reconnectTimer = setTimeout(connectWS, 3000);
+  };
+
+  ws.onerror = () => ws.close();
+}
+
+function send(msg) {
+  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(msg));
+}
+
+async function handleMsg(msg) {
+  switch (msg.type) {
+    case 'id':
+      myId = msg.id;
+      break;
+
+    case 'peer-list':
+      if (myRole === 'viewer') {
+        const cams = msg.peers.filter(p => p.role === 'camera');
+        updateCamCount(cams.length);
+        for (const cam of cams) {
+          if (!peers[cam.id]) await connectToCam(cam);
+        }
+        const camIds = cams.map(c => c.id);
+        for (const id in tiles) {
+          if (!camIds.includes(id)) removeTile(id);
+        }
+      }
+      if (myRole === 'camera') {
+        const viewers = msg.peers.filter(p => p.role === 'viewer').length;
+        document.getElementById('viewers-lbl').textContent = viewers + ' مشاهد';
+      }
+      break;
+
+    case 'offer':
+      if (myRole === 'camera') await handleOffer(msg);
+      break;
+
+    case 'answer':
+      if (peers[msg.from]) await peers[msg.from].setRemoteDescription(msg.sdp).catch(() => {});
+      break;
+
+    case 'ice':
+      if (peers[msg.from]) peers[msg.from].addIceCandidate(msg.candidate).catch(() => {});
+      break;
+  }
+}
+
+// ── CAMERA ──
+async function startStream() {
+  try {
+    if (localStream) localStream.getTracks().forEach(t => t.stop());
+    localStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: facing, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    document.getElementById('cam-video').srcObject = localStream;
+  } catch (e) {
+    toast('تعذّر الكاميرا: ' + e.message);
+  }
+}
+
+async function flipCam() {
+  facing = facing === 'environment' ? 'user' : 'environment';
+  await startStream();
+  for (const id in peers) {
+    const sender = peers[id].getSenders().find(s => s.track?.kind === 'video');
+    if (sender && localStream) sender.replaceTrack(localStream.getVideoTracks()[0]).catch(() => {});
+  }
+  toast(facing === 'user' ? 'الكاميرا الأمامية' : 'الكاميرا الخلفية');
+}
+
+async function toggleTorch() {
+  if (!localStream) return;
+  const track = localStream.getVideoTracks()[0];
+  try {
+    torchOn = !torchOn;
+    await track.applyConstraints({ advanced: [{ torch: torchOn }] });
+    document.getElementById('torch-btn').textContent = torchOn ? '🔦 فلاش ✓' : '🔦 فلاش';
+  } catch { toast('الفلاش غير متاح'); torchOn = false; }
+}
+
+async function handleOffer(msg) {
+  const pc = newPC(msg.from);
+  if (localStream) localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+  await pc.setRemoteDescription(msg.sdp);
+  const answer = await pc.createAnswer();
+  await pc.setLocalDescription(answer);
+  send({ type: 'answer', to: msg.from, sdp: pc.localDescription });
+}
+
+// ── VIEWER ──
+async function connectToCam(cam) {
+  if (tiles[cam.id]) return;
+  addTile(cam);
+
+  const pc = newPC(cam.id);
+  pc.ontrack = e => {
+    const tile = tiles[cam.id];
+    if (!tile) return;
+    tile.video.srcObject = e.streams[0];
+    tile.badge.textContent = 'مباشر';
+    tile.badge.className = 'tile-badge b-live';
+    startMotion(cam.id, tile.video, cam.name || cam.id);
+  };
+  pc.onconnectionstatechange = () => {
+    const tile = tiles[cam.id];
+    if (!tile) return;
+    const s = pc.connectionState;
+    if (s === 'connected') { tile.badge.textContent = 'مباشر'; tile.badge.className = 'tile-badge b-live'; }
+    else if (s === 'failed' || s === 'disconnected') { tile.badge.textContent = 'منقطع'; tile.badge.className = 'tile-badge b-off'; }
+  };
+
+  const offer = await pc.createOffer({ offerToReceiveVideo: true });
+  await pc.setLocalDescription(offer);
+  send({ type: 'offer', to: cam.id, sdp: pc.localDescription });
+}
+
+function newPC(peerId) {
+  const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+  peers[peerId] = pc;
+  pc.onicecandidate = e => {
+    if (e.candidate) send({ type: 'ice', to: peerId, candidate: e.candidate });
+  };
+  return pc;
+}
+
+function addTile(cam) {
+  const grid = document.getElementById('cams-grid');
+  document.getElementById('empty-state')?.remove();
+
+  const tile = document.createElement('div');
+  tile.className = 'cam-tile';
+  tile.id = 'tile-' + cam.id;
+  tile.onclick = () => openFs(cam.id, cam.name || cam.id);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'tile-video-wrap';
+
+  const motionEl = document.createElement('div');
+  motionEl.className = 'tile-motion';
+  motionEl.textContent = '⚠ حركة';
+
+  const fsHint = document.createElement('div');
+  fsHint.className = 'tile-fs';
+  fsHint.textContent = '⛶ شاشة كاملة';
+
+  const vid = document.createElement('video');
+  vid.autoplay = true; vid.playsInline = true; vid.muted = true;
+
+  wrap.appendChild(motionEl);
+  wrap.appendChild(fsHint);
+  wrap.appendChild(vid);
+
+  const footer = document.createElement('div');
+  footer.className = 'tile-footer';
+
+  const name = document.createElement('span');
+  name.className = 'tile-name';
+  name.textContent = cam.name || cam.id;
+
+  const badge = document.createElement('span');
+  badge.className = 'tile-badge b-conn';
+  badge.textContent = 'جاري الاتصال...';
+
+  footer.appendChild(name);
+  footer.appendChild(badge);
+  tile.appendChild(wrap);
+  tile.appendChild(footer);
+  grid.appendChild(tile);
+
+  tiles[cam.id] = { el: tile, video: vid, badge, motion: motionEl, name: cam.name || cam.id };
+}
+
+function removeTile(id) {
+  tiles[id]?.el.remove();
+  delete tiles[id];
+  if (peers[id]) { peers[id].close(); delete peers[id]; }
+  clearInterval(motionTimers[id]);
+  delete motionTimers[id];
+
+  if (!document.querySelectorAll('.cam-tile').length) {
+    const grid = document.getElementById('cams-grid');
+    const empty = document.createElement('div');
+    empty.className = 'empty'; empty.id = 'empty-state';
+    empty.innerHTML = '<div class="empty-icon">📡</div><div class="empty-txt">في انتظار الكاميرات...<br>افتح الرابط على هاتف آخر واختر "كاميرا"</div>';
+    grid.appendChild(empty);
+  }
+}
+
+// ── MOTION ──
+function startMotion(id, vid, name) {
+  const c = document.createElement('canvas');
+  c.width = 60; c.height = 45;
+  const ctx = c.getContext('2d');
+  let prev = null;
+  clearInterval(motionTimers[id]);
+  motionTimers[id] = setInterval(() => {
+    if (!tiles[id]) { clearInterval(motionTimers[id]); return; }
+    try {
+      ctx.drawImage(vid, 0, 0, 60, 45);
+      const cur = ctx.getImageData(0, 0, 60, 45).data;
+      if (prev) {
+        let diff = 0;
+        for (let i = 0; i < cur.length; i += 4) diff += Math.abs(cur[i] - prev[i]);
+        const moved = diff / (60 * 45) > 20;
+        tiles[id]?.motion.classList.toggle('show', moved);
+        if (moved) addLog(name);
+      }
+      prev = cur;
+    } catch {}
+  }, 2500);
+}
+
+function addLog(name) {
+  const log = document.getElementById('motion-log');
+  log.querySelector('.log-empty-txt')?.remove();
+  const now = new Date().toLocaleTimeString('ar');
+  const row = document.createElement('div');
+  row.className = 'log-row';
+  row.innerHTML = `<span class="log-t">${now}</span><span>${name} — حركة</span>`;
+  log.prepend(row);
+  if (log.children.length > 40) log.lastChild.remove();
+}
+
+// ── UI HELPERS ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function openFs(id, name) {
+  const tile = tiles[id];
+  if (!tile?.video.srcObject) return;
+  document.getElementById('fs-video').srcObject = tile.video.srcObject;
+  document.getElementById('fs-name').textContent = name;
+  document.getElementById('fs').classList.add('active');
+  document.getElementById('fs').style.display = 'flex';
+}
+function closeFs() {
+  document.getElementById('fs').classList.remove('active');
+  document.getElementById('fs').style.display = 'none';
+  document.getElementById('fs-video').srcObject = null;
+}
+
+function updateCamCount(n) {
+  document.getElementById('cam-count-btn').textContent = n + ' كاميرا';
+  const dot = document.getElementById('v-dot');
+  if (n > 0) { dot.style.background = 'var(--green)'; dot.style.animation = 'blink 1.4s infinite'; }
+  else { dot.style.background = 'var(--muted)'; dot.style.animation = 'none'; }
+}
+
+function setCamStatus(connected) {
+  const pill = document.getElementById('conn-pill');
+  if (connected) { pill.textContent = 'متصل'; pill.className = 'conn-pill conn-ok'; }
+  else { pill.textContent = 'غير متصل'; pill.className = 'conn-pill conn-no'; }
+  document.getElementById('cam-status-txt').textContent = connected ? 'يبث مباشرة عبر الإنترنت' : 'جاري إعادة الاتصال...';
+}
+
+function setSplashStatus(state, txt) {
+  const dot = document.getElementById('splash-dot');
+  dot.className = 'dot ' + (state === 'connecting' ? '' : state === 'ok' ? 'green' : 'red');
+  document.getElementById('splash-txt').textContent = txt;
+}
+
+function copyLink() {
+  const link = location.href;
+  navigator.clipboard?.writeText(link).then(() => toast('تم نسخ الرابط ✓')).catch(() => {
+    prompt('انسخ هذا الرابط:', link);
+  });
+}
+
+function leave() {
+  clearTimeout(reconnectTimer);
+  if (localStream) localStream.getTracks().forEach(t => t.stop());
+  for (const id in peers) { peers[id].close(); delete peers[id]; }
+  if (ws) { ws.onclose = null; ws.close(); }
+  location.reload();
+}
+
+function toast(msg, dur = 2500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('show'), dur);
+}
+</script>
+</body>
+</html>
