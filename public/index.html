@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -17,13 +17,13 @@
   --accent:#3b7eff;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
   --text:#e8eaf0;--muted:#6b7280;--radius:14px;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden;-webkit-overflow-scrolling:touch}
 
-/* ── SCREENS ── */
-.screen{display:none;height:100dvh;flex-direction:column;overflow:hidden}
+/* â”€â”€ SCREENS â”€â”€ */
+.screen{display:none;height:100dvh;flex-direction:column;overflow:hidden;-webkit-overflow-scrolling:touch}
 .screen.active{display:flex}
 
-/* ── SPLASH ── */
+/* â”€â”€ SPLASH â”€â”€ */
 #splash{align-items:center;justify-content:center;gap:0;padding:2rem}
 .logo-wrap{margin-bottom:1.5rem;text-align:center}
 .logo-icon{font-size:56px;display:block;margin-bottom:4px}
@@ -52,7 +52,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .dot.red{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ── CAMERA ── */
+/* â”€â”€ CAMERA â”€â”€ */
 #camera{position:relative;background:#000}
 #cam-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cam-ui{position:absolute;inset:0;display:flex;flex-direction:column;pointer-events:none}
@@ -72,8 +72,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .ctrl-btn.danger{border-color:rgba(239,68,68,.5);color:var(--red)}
 .cam-status-txt{text-align:center;font-size:11px;color:rgba(255,255,255,.45);margin-top:4px}
 
-/* ── VIEWER ── */
-#viewer{background:var(--bg);overflow:hidden}
+/* â”€â”€ VIEWER â”€â”€ */
+#viewer{background:var(--bg);overflow:hidden;-webkit-overflow-scrolling:touch}
 .v-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,12px) + 12px) 16px 12px;background:var(--bg2);border-bottom:1px solid var(--border)}
 .v-title{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
 .v-title-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
@@ -113,7 +113,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .log-t{color:var(--accent);min-width:65px}
 .log-empty-txt{font-size:11px;color:var(--muted);text-align:center;padding:8px}
 
-/* ── FULLSCREEN ── */
+/* â”€â”€ FULLSCREEN â”€â”€ */
 #fs{position:fixed;inset:0;background:#000;z-index:1000;display:none;flex-direction:column}
 #fs.active{display:flex}
 #fs-video{flex:1;width:100%;object-fit:contain}
@@ -121,7 +121,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .fs-name{font-size:14px;font-weight:600}
 .fs-close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;cursor:pointer}
 
-/* ── INSTALL BANNER ── */
+/* â”€â”€ INSTALL BANNER â”€â”€ */
 #install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--bg2);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 12px);flex-direction:row;align-items:center;gap:12px}
 #install-banner.show{display:flex}
 .install-txt{flex:1;font-size:13px;color:var(--text)}
@@ -129,132 +129,132 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .install-btn{background:var(--accent);border:none;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
 .install-x{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px}
 
-/* ── TOAST ── */
+/* â”€â”€ TOAST â”€â”€ */
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:9px 20px;border-radius:999px;font-size:13px;opacity:0;transition:all .25s;z-index:9999;white-space:nowrap;pointer-events:none}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- ═══ SPLASH ═══ -->
+<!-- â•â•â• SPLASH â•â•â• -->
 <div id="splash" class="screen active">
   <div class="logo-wrap">
-    <span class="logo-icon">📷</span>
+    <span class="logo-icon">ðŸ“·</span>
     <div class="logo-name">HomeCam</div>
-    <div class="logo-sub">نظام المراقبة عبر الإنترنت</div>
+    <div class="logo-sub">Ù†Ø¸Ø§Ù… Ø§Ù„Ù…Ø±Ø§Ù‚Ø¨Ø© Ø¹Ø¨Ø± Ø§Ù„Ø¥Ù†ØªØ±Ù†Øª</div>
   </div>
 
   <div class="card">
-    <div class="card-title">معلومات الجهاز</div>
-    <input id="inp-name" class="inp" placeholder="اسم الجهاز (مثال: غرفة المعيشة)" maxlength="30">
+    <div class="card-title">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ø¬Ù‡Ø§Ø²</div>
+    <input id="inp-name" class="inp" placeholder="Ø§Ø³Ù… Ø§Ù„Ø¬Ù‡Ø§Ø² (Ù…Ø«Ø§Ù„: ØºØ±ÙØ© Ø§Ù„Ù…Ø¹ÙŠØ´Ø©)" maxlength="30">
     <div class="inp-row">
-      <input id="inp-room" class="inp inp-sm" placeholder="رمز الغرفة (مشترك بين أجهزتك)" maxlength="20">
+      <input id="inp-room" class="inp inp-sm" placeholder="Ø±Ù…Ø² Ø§Ù„ØºØ±ÙØ© (Ù…Ø´ØªØ±Ùƒ Ø¨ÙŠÙ† Ø£Ø¬Ù‡Ø²ØªÙƒ)" maxlength="20">
     </div>
   </div>
 
   <div class="card" style="margin-bottom:0">
-    <div class="card-title">اختر دور هذا الجهاز</div>
+    <div class="card-title">Ø§Ø®ØªØ± Ø¯ÙˆØ± Ù‡Ø°Ø§ Ø§Ù„Ø¬Ù‡Ø§Ø²</div>
     <div class="role-grid">
       <button class="role-btn camera" onclick="join('camera')">
-        <span class="role-icon">📸</span>
-        <span>كاميرا</span>
-        <span class="role-desc">يبث الفيديو للمراقبة</span>
+        <span class="role-icon">ðŸ“¸</span>
+        <span>ÙƒØ§Ù…ÙŠØ±Ø§</span>
+        <span class="role-desc">ÙŠØ¨Ø« Ø§Ù„ÙÙŠØ¯ÙŠÙˆ Ù„Ù„Ù…Ø±Ø§Ù‚Ø¨Ø©</span>
       </button>
       <button class="role-btn viewer" onclick="join('viewer')">
-        <span class="role-icon">🖥️</span>
-        <span>مراقبة</span>
-        <span class="role-desc">يشاهد جميع الكاميرات</span>
+        <span class="role-icon">ðŸ–¥ï¸</span>
+        <span>Ù…Ø±Ø§Ù‚Ø¨Ø©</span>
+        <span class="role-desc">ÙŠØ´Ø§Ù‡Ø¯ Ø¬Ù…ÙŠØ¹ Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§Øª</span>
       </button>
     </div>
   </div>
 
   <div class="status-pill" id="splash-status">
     <div class="dot" id="splash-dot"></div>
-    <span id="splash-txt">جاهز للاتصال</span>
+    <span id="splash-txt">Ø¬Ø§Ù‡Ø² Ù„Ù„Ø§ØªØµØ§Ù„</span>
   </div>
 </div>
 
-<!-- ═══ CAMERA ═══ -->
+<!-- â•â•â• CAMERA â•â•â• -->
 <div id="camera" class="screen">
   <video id="cam-video" autoplay muted playsinline></video>
   <div class="cam-ui">
     <div class="cam-top">
       <div class="cam-badge">
         <div class="live-dot"></div>
-        <span id="cam-name-lbl">الكاميرا</span>
+        <span id="cam-name-lbl">Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§</span>
       </div>
       <div class="cam-info">
-        <div class="viewer-pill" id="viewers-lbl">0 مشاهد</div>
-        <div class="conn-pill conn-no" id="conn-pill">غير متصل</div>
+        <div class="viewer-pill" id="viewers-lbl">0 Ù…Ø´Ø§Ù‡Ø¯</div>
+        <div class="conn-pill conn-no" id="conn-pill">ØºÙŠØ± Ù…ØªØµÙ„</div>
       </div>
     </div>
     <div class="cam-center"></div>
     <div class="cam-bottom">
       <div class="cam-controls">
-        <button class="ctrl-btn" onclick="flipCam()">🔄 قلب</button>
-        <button class="ctrl-btn" onclick="toggleTorch()" id="torch-btn">🔦 فلاش</button>
-        <button class="ctrl-btn danger" onclick="leave()">← خروج</button>
+        <button class="ctrl-btn" onclick="flipCam()">ðŸ”„ Ù‚Ù„Ø¨</button>
+        <button class="ctrl-btn" onclick="toggleTorch()" id="torch-btn">ðŸ”¦ ÙÙ„Ø§Ø´</button>
+        <button class="ctrl-btn danger" onclick="leave()">â† Ø®Ø±ÙˆØ¬</button>
       </div>
-      <div class="cam-status-txt" id="cam-status-txt">جاري الاتصال...</div>
+      <div class="cam-status-txt" id="cam-status-txt">Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø§ØªØµØ§Ù„...</div>
     </div>
   </div>
 </div>
 
-<!-- ═══ VIEWER ═══ -->
+<!-- â•â•â• VIEWER â•â•â• -->
 <div id="viewer" class="screen">
   <div class="v-header">
     <div class="v-title">
       <div class="v-title-dot" id="v-dot" style="background:var(--muted);animation:none"></div>
-      لوحة المراقبة
+      Ù„ÙˆØ­Ø© Ø§Ù„Ù…Ø±Ø§Ù‚Ø¨Ø©
     </div>
     <div class="v-actions">
-      <button class="hdr-btn" id="cam-count-btn">0 كاميرا</button>
-      <button class="hdr-btn" onclick="copyLink()">🔗 رابط</button>
-      <button class="hdr-btn" onclick="leave()">← خروج</button>
+      <button class="hdr-btn" id="cam-count-btn">0 ÙƒØ§Ù…ÙŠØ±Ø§</button>
+      <button class="hdr-btn" onclick="copyLink()">ðŸ”— Ø±Ø§Ø¨Ø·</button>
+      <button class="hdr-btn" onclick="leave()">â† Ø®Ø±ÙˆØ¬</button>
     </div>
   </div>
 
   <div class="v-body">
     <div class="grid" id="cams-grid">
       <div class="empty" id="empty-state">
-        <div class="empty-icon">📡</div>
-        <div class="empty-txt">في انتظار الكاميرات...<br>افتح الرابط على هاتف آخر واختر "كاميرا"</div>
+        <div class="empty-icon">ðŸ“¡</div>
+        <div class="empty-txt">ÙÙŠ Ø§Ù†ØªØ¸Ø§Ø± Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§Øª...<br>Ø§ÙØªØ­ Ø§Ù„Ø±Ø§Ø¨Ø· Ø¹Ù„Ù‰ Ù‡Ø§ØªÙ Ø¢Ø®Ø± ÙˆØ§Ø®ØªØ± "ÙƒØ§Ù…ÙŠØ±Ø§"</div>
       </div>
     </div>
   </div>
 
   <div class="log-section">
-    <div class="log-hdr">📋 سجل الحركة</div>
+    <div class="log-hdr">ðŸ“‹ Ø³Ø¬Ù„ Ø§Ù„Ø­Ø±ÙƒØ©</div>
     <div class="log-body" id="motion-log">
-      <div class="log-empty-txt">لا أحداث بعد</div>
+      <div class="log-empty-txt">Ù„Ø§ Ø£Ø­Ø¯Ø§Ø« Ø¨Ø¹Ø¯</div>
     </div>
   </div>
 </div>
 
-<!-- ═══ FULLSCREEN ═══ -->
+<!-- â•â•â• FULLSCREEN â•â•â• -->
 <div id="fs">
   <video id="fs-video" autoplay playsinline></video>
   <div class="fs-bar">
     <div class="fs-name" id="fs-name"></div>
-    <button class="fs-close" onclick="closeFs()">✕ إغلاق</button>
+    <button class="fs-close" onclick="closeFs()">âœ• Ø¥ØºÙ„Ø§Ù‚</button>
   </div>
 </div>
 
-<!-- ═══ INSTALL BANNER ═══ -->
+<!-- â•â•â• INSTALL BANNER â•â•â• -->
 <div id="install-banner">
   <div class="install-txt">
-    ثبّت HomeCam على هاتفك
-    <span>يعمل كتطبيق حقيقي بدون متصفح</span>
+    Ø«Ø¨Ù‘Øª HomeCam Ø¹Ù„Ù‰ Ù‡Ø§ØªÙÙƒ
+    <span>ÙŠØ¹Ù…Ù„ ÙƒØªØ·Ø¨ÙŠÙ‚ Ø­Ù‚ÙŠÙ‚ÙŠ Ø¨Ø¯ÙˆÙ† Ù…ØªØµÙØ­</span>
   </div>
-  <button class="install-btn" onclick="installApp()">تثبيت</button>
-  <button class="install-x" onclick="dismissInstall()">✕</button>
+  <button class="install-btn" onclick="installApp()">ØªØ«Ø¨ÙŠØª</button>
+  <button class="install-x" onclick="dismissInstall()">âœ•</button>
 </div>
 
-<!-- ═══ TOAST ═══ -->
+<!-- â•â•â• TOAST â•â•â• -->
 <div id="toast"></div>
 
 <script>
-// ── CONFIG ──
+// â”€â”€ CONFIG â”€â”€
 // REPLACE THIS after deploying to Railway:
 const WS_URL = location.protocol === 'https:'
   ? 'wss://' + location.host
@@ -277,7 +277,7 @@ const ICE_SERVERS = [
   }
 ];
 
-// ── STATE ──
+// â”€â”€ STATE â”€â”€
 let ws, myId, myRole, myName, myRoom;
 let localStream = null, facing = 'environment', torchOn = false;
 const peers = {};
@@ -286,7 +286,7 @@ const motionTimers = {};
 let installPrompt = null;
 let reconnectTimer = null;
 
-// ── PWA ──
+// â”€â”€ PWA â”€â”€
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
@@ -306,7 +306,7 @@ function dismissInstall() {
   document.getElementById('install-banner').classList.remove('show');
 }
 
-// ── KEEP SCREEN ON ──
+// â”€â”€ KEEP SCREEN ON â”€â”€
 let wakeLock = null;
 async function keepAwake() {
   try {
@@ -317,13 +317,13 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && myRole === 'camera') keepAwake();
 });
 
-// ── JOIN ──
+// â”€â”€ JOIN â”€â”€
 async function join(role) {
-  const name = document.getElementById('inp-name').value.trim() || (role === 'camera' ? 'كاميرا' : 'مراقبة');
+  const name = document.getElementById('inp-name').value.trim() || (role === 'camera' ? 'ÙƒØ§Ù…ÙŠØ±Ø§' : 'Ù…Ø±Ø§Ù‚Ø¨Ø©');
   const room = document.getElementById('inp-room').value.trim() || 'default';
   myRole = role; myName = name; myRoom = room;
 
-  setSplashStatus('connecting', 'جاري الاتصال...');
+  setSplashStatus('connecting', 'Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø§ØªØµØ§Ù„...');
 
   if (role === 'camera') {
     await startStream();
@@ -337,7 +337,7 @@ async function join(role) {
   connectWS();
 }
 
-// ── WEBSOCKET ──
+// â”€â”€ WEBSOCKET â”€â”€
 function connectWS() {
   if (ws) { try { ws.close(); } catch {} }
   ws = new WebSocket(WS_URL);
@@ -382,7 +382,7 @@ async function handleMsg(msg) {
       }
       if (myRole === 'camera') {
         const viewers = msg.peers.filter(p => p.role === 'viewer').length;
-        document.getElementById('viewers-lbl').textContent = viewers + ' مشاهد';
+        document.getElementById('viewers-lbl').textContent = viewers + ' Ù…Ø´Ø§Ù‡Ø¯';
       }
       break;
 
@@ -400,7 +400,7 @@ async function handleMsg(msg) {
   }
 }
 
-// ── CAMERA ──
+// â”€â”€ CAMERA â”€â”€
 async function startStream() {
   try {
     if (localStream) localStream.getTracks().forEach(t => t.stop());
@@ -410,7 +410,7 @@ async function startStream() {
     });
     document.getElementById('cam-video').srcObject = localStream;
   } catch (e) {
-    toast('تعذّر الكاميرا: ' + e.message);
+    toast('ØªØ¹Ø°Ù‘Ø± Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§: ' + e.message);
   }
 }
 
@@ -421,7 +421,7 @@ async function flipCam() {
     const sender = peers[id].getSenders().find(s => s.track?.kind === 'video');
     if (sender && localStream) sender.replaceTrack(localStream.getVideoTracks()[0]).catch(() => {});
   }
-  toast(facing === 'user' ? 'الكاميرا الأمامية' : 'الكاميرا الخلفية');
+  toast(facing === 'user' ? 'Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§ Ø§Ù„Ø£Ù…Ø§Ù…ÙŠØ©' : 'Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§ Ø§Ù„Ø®Ù„ÙÙŠØ©');
 }
 
 async function toggleTorch() {
@@ -430,8 +430,8 @@ async function toggleTorch() {
   try {
     torchOn = !torchOn;
     await track.applyConstraints({ advanced: [{ torch: torchOn }] });
-    document.getElementById('torch-btn').textContent = torchOn ? '🔦 فلاش ✓' : '🔦 فلاش';
-  } catch { toast('الفلاش غير متاح'); torchOn = false; }
+    document.getElementById('torch-btn').textContent = torchOn ? 'ðŸ”¦ ÙÙ„Ø§Ø´ âœ“' : 'ðŸ”¦ ÙÙ„Ø§Ø´';
+  } catch { toast('Ø§Ù„ÙÙ„Ø§Ø´ ØºÙŠØ± Ù…ØªØ§Ø­'); torchOn = false; }
 }
 
 async function handleOffer(msg) {
@@ -443,7 +443,7 @@ async function handleOffer(msg) {
   send({ type: 'answer', to: msg.from, sdp: pc.localDescription });
 }
 
-// ── VIEWER ──
+// â”€â”€ VIEWER â”€â”€
 async function connectToCam(cam) {
   if (tiles[cam.id]) return;
   addTile(cam);
@@ -453,7 +453,7 @@ async function connectToCam(cam) {
     const tile = tiles[cam.id];
     if (!tile) return;
     tile.video.srcObject = e.streams[0];
-    tile.badge.textContent = 'مباشر';
+    tile.badge.textContent = 'Ù…Ø¨Ø§Ø´Ø±';
     tile.badge.className = 'tile-badge b-live';
     startMotion(cam.id, tile.video, cam.name || cam.id);
   };
@@ -461,8 +461,8 @@ async function connectToCam(cam) {
     const tile = tiles[cam.id];
     if (!tile) return;
     const s = pc.connectionState;
-    if (s === 'connected') { tile.badge.textContent = 'مباشر'; tile.badge.className = 'tile-badge b-live'; }
-    else if (s === 'failed' || s === 'disconnected') { tile.badge.textContent = 'منقطع'; tile.badge.className = 'tile-badge b-off'; }
+    if (s === 'connected') { tile.badge.textContent = 'Ù…Ø¨Ø§Ø´Ø±'; tile.badge.className = 'tile-badge b-live'; }
+    else if (s === 'failed' || s === 'disconnected') { tile.badge.textContent = 'Ù…Ù†Ù‚Ø·Ø¹'; tile.badge.className = 'tile-badge b-off'; }
   };
 
   const offer = await pc.createOffer({ offerToReceiveVideo: true });
@@ -493,11 +493,11 @@ function addTile(cam) {
 
   const motionEl = document.createElement('div');
   motionEl.className = 'tile-motion';
-  motionEl.textContent = '⚠ حركة';
+  motionEl.textContent = 'âš  Ø­Ø±ÙƒØ©';
 
   const fsHint = document.createElement('div');
   fsHint.className = 'tile-fs';
-  fsHint.textContent = '⛶ شاشة كاملة';
+  fsHint.textContent = 'â›¶ Ø´Ø§Ø´Ø© ÙƒØ§Ù…Ù„Ø©';
 
   const vid = document.createElement('video');
   vid.autoplay = true; vid.playsInline = true; vid.muted = true;
@@ -515,7 +515,7 @@ function addTile(cam) {
 
   const badge = document.createElement('span');
   badge.className = 'tile-badge b-conn';
-  badge.textContent = 'جاري الاتصال...';
+  badge.textContent = 'Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø§ØªØµØ§Ù„...';
 
   footer.appendChild(name);
   footer.appendChild(badge);
@@ -537,12 +537,12 @@ function removeTile(id) {
     const grid = document.getElementById('cams-grid');
     const empty = document.createElement('div');
     empty.className = 'empty'; empty.id = 'empty-state';
-    empty.innerHTML = '<div class="empty-icon">📡</div><div class="empty-txt">في انتظار الكاميرات...<br>افتح الرابط على هاتف آخر واختر "كاميرا"</div>';
+    empty.innerHTML = '<div class="empty-icon">ðŸ“¡</div><div class="empty-txt">ÙÙŠ Ø§Ù†ØªØ¸Ø§Ø± Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§Øª...<br>Ø§ÙØªØ­ Ø§Ù„Ø±Ø§Ø¨Ø· Ø¹Ù„Ù‰ Ù‡Ø§ØªÙ Ø¢Ø®Ø± ÙˆØ§Ø®ØªØ± "ÙƒØ§Ù…ÙŠØ±Ø§"</div>';
     grid.appendChild(empty);
   }
 }
 
-// ── MOTION ──
+// â”€â”€ MOTION â”€â”€
 function startMotion(id, vid, name) {
   const c = document.createElement('canvas');
   c.width = 60; c.height = 45;
@@ -572,12 +572,12 @@ function addLog(name) {
   const now = new Date().toLocaleTimeString('ar');
   const row = document.createElement('div');
   row.className = 'log-row';
-  row.innerHTML = `<span class="log-t">${now}</span><span>${name} — حركة</span>`;
+  row.innerHTML = `<span class="log-t">${now}</span><span>${name} â€” Ø­Ø±ÙƒØ©</span>`;
   log.prepend(row);
   if (log.children.length > 40) log.lastChild.remove();
 }
 
-// ── UI HELPERS ──
+// â”€â”€ UI HELPERS â”€â”€
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -598,7 +598,7 @@ function closeFs() {
 }
 
 function updateCamCount(n) {
-  document.getElementById('cam-count-btn').textContent = n + ' كاميرا';
+  document.getElementById('cam-count-btn').textContent = n + ' ÙƒØ§Ù…ÙŠØ±Ø§';
   const dot = document.getElementById('v-dot');
   if (n > 0) { dot.style.background = 'var(--green)'; dot.style.animation = 'blink 1.4s infinite'; }
   else { dot.style.background = 'var(--muted)'; dot.style.animation = 'none'; }
@@ -606,9 +606,9 @@ function updateCamCount(n) {
 
 function setCamStatus(connected) {
   const pill = document.getElementById('conn-pill');
-  if (connected) { pill.textContent = 'متصل'; pill.className = 'conn-pill conn-ok'; }
-  else { pill.textContent = 'غير متصل'; pill.className = 'conn-pill conn-no'; }
-  document.getElementById('cam-status-txt').textContent = connected ? 'يبث مباشرة عبر الإنترنت' : 'جاري إعادة الاتصال...';
+  if (connected) { pill.textContent = 'Ù…ØªØµÙ„'; pill.className = 'conn-pill conn-ok'; }
+  else { pill.textContent = 'ØºÙŠØ± Ù…ØªØµÙ„'; pill.className = 'conn-pill conn-no'; }
+  document.getElementById('cam-status-txt').textContent = connected ? 'ÙŠØ¨Ø« Ù…Ø¨Ø§Ø´Ø±Ø© Ø¹Ø¨Ø± Ø§Ù„Ø¥Ù†ØªØ±Ù†Øª' : 'Ø¬Ø§Ø±ÙŠ Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„Ø§ØªØµØ§Ù„...';
 }
 
 function setSplashStatus(state, txt) {
@@ -619,8 +619,8 @@ function setSplashStatus(state, txt) {
 
 function copyLink() {
   const link = location.href;
-  navigator.clipboard?.writeText(link).then(() => toast('تم نسخ الرابط ✓')).catch(() => {
-    prompt('انسخ هذا الرابط:', link);
+  navigator.clipboard?.writeText(link).then(() => toast('ØªÙ… Ù†Ø³Ø® Ø§Ù„Ø±Ø§Ø¨Ø· âœ“')).catch(() => {
+    prompt('Ø§Ù†Ø³Ø® Ù‡Ø°Ø§ Ø§Ù„Ø±Ø§Ø¨Ø·:', link);
   });
 }
 
@@ -642,3 +642,4 @@ function toast(msg, dur = 2500) {
 </script>
 </body>
 </html>
+
