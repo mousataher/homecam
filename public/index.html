@@ -11,636 +11,361 @@
 <link rel="apple-touch-icon" href="/icon-192.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#0b0e14;--bg2:#13171f;--bg3:#1c2130;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
-  --accent:#3b7eff;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
-  --text:#e8eaf0;--muted:#6b7280;--radius:14px;
-}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden;-webkit-overflow-scrolling:touch}
-
-/* â”€â”€ SCREENS â”€â”€ */
-.screen{display:none;height:100dvh;flex-direction:column;overflow:hidden;-webkit-overflow-scrolling:touch}
+:root{--bg:#0b0e14;--bg2:#13171f;--bg3:#1c2130;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--accent:#3b7eff;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;--text:#e8eaf0;--muted:#6b7280;--radius:14px}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;overflow-x:hidden}
+.screen{display:none;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
-
-/* â”€â”€ SPLASH â”€â”€ */
-#splash{align-items:center;justify-content:center;gap:0;padding:2rem}
+#splash{align-items:center;justify-content:center;padding:2rem;overflow-y:auto}
 .logo-wrap{margin-bottom:1.5rem;text-align:center}
-.logo-icon{font-size:56px;display:block;margin-bottom:4px}
-.logo-name{font-size:26px;font-weight:700;letter-spacing:-0.5px}
+.logo-icon{font-size:52px;display:block;margin-bottom:4px}
+.logo-name{font-size:24px;font-weight:700}
 .logo-sub{font-size:13px;color:var(--muted);margin-top:2px}
-
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;width:100%;max-width:360px;margin-bottom:12px}
-.card-title{font-size:12px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
-.inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;padding:11px 14px;outline:none;transition:border .2s}
+.card-title{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:.5px}
+.inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;padding:12px 14px;outline:none;transition:border .2s;font-family:inherit}
 .inp:focus{border-color:var(--accent)}
 .inp::placeholder{color:var(--muted)}
 .inp-row{display:flex;gap:8px;margin-top:8px}
-.inp-sm{flex:1}
-
-.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:0}
-.role-btn{background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;color:var(--text);padding:16px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all .2s;font-size:13px;font-weight:600}
-.role-btn:active{transform:scale(.97)}
-.role-btn.camera:hover,.role-btn.camera:focus{border-color:var(--accent);background:rgba(59,126,255,.08)}
-.role-btn.viewer:hover,.role-btn.viewer:focus{border-color:var(--green);background:rgba(34,197,94,.08)}
-.role-icon{font-size:30px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.role-btn{background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;color:var(--text);padding:16px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px;font-weight:600;font-family:inherit}
+.role-icon{font-size:28px}
 .role-desc{font-size:11px;color:var(--muted);font-weight:400;text-align:center}
-
-.status-pill{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);justify-content:center;margin-top:16px;min-height:20px}
+.status-pill{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);justify-content:center;margin-top:16px}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
 .dot.green{background:var(--green);animation:blink 1.4s infinite}
-.dot.red{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
-/* â”€â”€ CAMERA â”€â”€ */
-#camera{position:relative;background:#000}
+#camera{position:relative;background:#000;height:100vh;overflow:hidden}
 #cam-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.cam-ui{position:absolute;inset:0;display:flex;flex-direction:column;pointer-events:none}
-.cam-top{padding:env(safe-area-inset-top,16px) 16px 0;display:flex;align-items:flex-start;justify-content:space-between;background:linear-gradient(to bottom,rgba(0,0,0,.65) 0%,transparent 100%);padding-bottom:20px;pointer-events:all}
-.cam-badge{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);border-radius:999px;padding:6px 14px;font-size:13px;color:#fff;display:flex;align-items:center;gap:7px}
+.cam-ui{position:absolute;inset:0;display:flex;flex-direction:column}
+.cam-top{padding:50px 16px 0;display:flex;align-items:flex-start;justify-content:space-between;background:linear-gradient(to bottom,rgba(0,0,0,.65),transparent);padding-bottom:20px}
+.cam-badge{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:6px 14px;font-size:13px;color:#fff;display:flex;align-items:center;gap:7px}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1s infinite;flex-shrink:0}
 .cam-info{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.viewer-pill{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);border-radius:999px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75)}
+.viewer-pill{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.75)}
 .conn-pill{border-radius:999px;padding:5px 12px;font-size:11px;font-weight:600}
 .conn-ok{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.3);color:var(--green)}
 .conn-no{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.3);color:var(--red)}
 .cam-center{flex:1}
-.cam-bottom{padding:0 16px calc(env(safe-area-inset-bottom,16px) + 16px);background:linear-gradient(to top,rgba(0,0,0,.65) 0%,transparent 100%);padding-top:30px;pointer-events:all}
+.cam-bottom{padding:0 16px 40px;background:linear-gradient(to top,rgba(0,0,0,.65),transparent);padding-top:30px}
 .cam-controls{display:flex;gap:10px;justify-content:center;align-items:center;margin-bottom:10px}
-.ctrl-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(10px);border-radius:12px;color:#fff;padding:12px 18px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;transition:all .15s}
-.ctrl-btn:active{transform:scale(.95);background:rgba(255,255,255,.2)}
+.ctrl-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:12px;color:#fff;padding:12px 18px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;font-family:inherit}
 .ctrl-btn.danger{border-color:rgba(239,68,68,.5);color:var(--red)}
 .cam-status-txt{text-align:center;font-size:11px;color:rgba(255,255,255,.45);margin-top:4px}
-
-/* â”€â”€ VIEWER â”€â”€ */
-#viewer{background:var(--bg);overflow:hidden;-webkit-overflow-scrolling:touch}
-.v-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,12px) + 12px) 16px 12px;background:var(--bg2);border-bottom:1px solid var(--border)}
+#viewer{background:var(--bg);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#viewer.active{display:flex}
+.v-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:50px 16px 12px;background:var(--bg2);border-bottom:1px solid var(--border)}
 .v-title{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
-.v-title-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite}
+.v-title-dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
 .v-actions{display:flex;gap:8px}
-.hdr-btn{background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:12px;padding:7px 12px;cursor:pointer;display:flex;align-items:center;gap:5px}
-.hdr-btn:active{transform:scale(.97)}
-
-.v-body{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:12px}
+.hdr-btn{background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:12px;padding:7px 12px;cursor:pointer;font-family:inherit}
+.v-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px}
 .grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
 @media(max-width:500px){.grid{grid-template-columns:1fr 1fr;gap:8px}}
-
-.cam-tile{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color .2s;position:relative}
-.cam-tile:active{transform:scale(.99)}
-.cam-tile:hover{border-color:var(--border2)}
+.cam-tile{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;position:relative}
 .tile-video-wrap{position:relative;background:#000;aspect-ratio:16/9}
 .tile-video-wrap video{width:100%;height:100%;object-fit:cover;display:block}
 .tile-motion{position:absolute;top:7px;left:7px;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;display:none}
 .tile-motion.show{display:block}
-.tile-fs{position:absolute;bottom:7px;right:7px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:11px;padding:4px 10px;border-radius:8px;opacity:0;transition:opacity .2s}
-.cam-tile:hover .tile-fs{opacity:1}
 .tile-footer{padding:9px 12px;display:flex;align-items:center;justify-content:space-between}
 .tile-name{font-size:13px;font-weight:500}
 .tile-badge{font-size:10px;padding:3px 9px;border-radius:999px;font-weight:600}
 .b-live{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25)}
 .b-conn{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
 .b-off{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border)}
-
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px;opacity:.5}
 .empty-icon{font-size:48px}
 .empty-txt{font-size:14px;color:var(--muted);text-align:center;line-height:1.6}
-
-.log-section{flex-shrink:0;border-top:1px solid var(--border);padding:10px 12px 12px}
-.log-hdr{font-size:11px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.log-body{max-height:100px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.log-section{flex-shrink:0;border-top:1px solid var(--border);padding:10px 12px 20px}
+.log-hdr{font-size:11px;color:var(--muted);margin-bottom:8px}
+.log-body{max-height:100px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .log-row{display:flex;gap:10px;font-size:11px;padding:3px 0;border-bottom:1px solid var(--border)}
 .log-row:last-child{border:none}
 .log-t{color:var(--accent);min-width:65px}
 .log-empty-txt{font-size:11px;color:var(--muted);text-align:center;padding:8px}
-
-/* â”€â”€ FULLSCREEN â”€â”€ */
 #fs{position:fixed;inset:0;background:#000;z-index:1000;display:none;flex-direction:column}
 #fs.active{display:flex}
 #fs-video{flex:1;width:100%;object-fit:contain}
-.fs-bar{flex-shrink:0;padding:12px 16px calc(env(safe-area-inset-bottom,12px) + 12px);background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:space-between}
+.fs-bar{flex-shrink:0;padding:12px 16px 30px;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:space-between}
 .fs-name{font-size:14px;font-weight:600}
-.fs-close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;cursor:pointer}
-
-/* â”€â”€ INSTALL BANNER â”€â”€ */
-#install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--bg2);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 12px);flex-direction:row;align-items:center;gap:12px}
+.fs-close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;cursor:pointer;font-family:inherit}
+#install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--bg2);border-top:1px solid var(--border);padding:12px 16px 30px;flex-direction:row;align-items:center;gap:12px}
 #install-banner.show{display:flex}
-.install-txt{flex:1;font-size:13px;color:var(--text)}
+.install-txt{flex:1;font-size:13px}
 .install-txt span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
-.install-btn{background:var(--accent);border:none;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.install-btn{background:var(--accent);border:none;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit}
 .install-x{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px}
-
-/* â”€â”€ TOAST â”€â”€ */
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:9px 20px;border-radius:999px;font-size:13px;opacity:0;transition:all .25s;z-index:9999;white-space:nowrap;pointer-events:none}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- â•â•â• SPLASH â•â•â• -->
 <div id="splash" class="screen active">
   <div class="logo-wrap">
-    <span class="logo-icon">ðŸ“·</span>
+    <span class="logo-icon">&#128247;</span>
     <div class="logo-name">HomeCam</div>
-    <div class="logo-sub">Ù†Ø¸Ø§Ù… Ø§Ù„Ù…Ø±Ø§Ù‚Ø¨Ø© Ø¹Ø¨Ø± Ø§Ù„Ø¥Ù†ØªØ±Ù†Øª</div>
+    <div class="logo-sub">&#1606;&#1592;&#1575;&#1605; &#1575;&#1604;&#1605;&#1585;&#1575;&#1602;&#1576;&#1577; &#1593;&#1576;&#1585; &#1575;&#1604;&#1573;&#1606;&#1578;&#1585;&#1606;&#1578;</div>
   </div>
-
   <div class="card">
-    <div class="card-title">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ø¬Ù‡Ø§Ø²</div>
-    <input id="inp-name" class="inp" placeholder="Ø§Ø³Ù… Ø§Ù„Ø¬Ù‡Ø§Ø² (Ù…Ø«Ø§Ù„: ØºØ±ÙØ© Ø§Ù„Ù…Ø¹ÙŠØ´Ø©)" maxlength="30">
+    <div class="card-title">&#1605;&#1593;&#1604;&#1608;&#1605;&#1575;&#1578; &#1575;&#1604;&#1580;&#1607;&#1575;&#1586;</div>
+    <input id="inp-name" class="inp" placeholder="&#1575;&#1587;&#1605; &#1575;&#1604;&#1580;&#1607;&#1575;&#1586;" maxlength="30">
     <div class="inp-row">
-      <input id="inp-room" class="inp inp-sm" placeholder="Ø±Ù…Ø² Ø§Ù„ØºØ±ÙØ© (Ù…Ø´ØªØ±Ùƒ Ø¨ÙŠÙ† Ø£Ø¬Ù‡Ø²ØªÙƒ)" maxlength="20">
+      <input id="inp-room" class="inp" placeholder="&#1585;&#1605;&#1586; &#1575;&#1604;&#1594;&#1585;&#1601;&#1577;" maxlength="20">
     </div>
   </div>
-
   <div class="card" style="margin-bottom:0">
-    <div class="card-title">Ø§Ø®ØªØ± Ø¯ÙˆØ± Ù‡Ø°Ø§ Ø§Ù„Ø¬Ù‡Ø§Ø²</div>
+    <div class="card-title">&#1583;&#1608;&#1585; &#1607;&#1584;&#1575; &#1575;&#1604;&#1580;&#1607;&#1575;&#1586;</div>
     <div class="role-grid">
-      <button class="role-btn camera" onclick="join('camera')">
-        <span class="role-icon">ðŸ“¸</span>
-        <span>ÙƒØ§Ù…ÙŠØ±Ø§</span>
-        <span class="role-desc">ÙŠØ¨Ø« Ø§Ù„ÙÙŠØ¯ÙŠÙˆ Ù„Ù„Ù…Ø±Ø§Ù‚Ø¨Ø©</span>
+      <button class="role-btn" onclick="join('camera')">
+        <span class="role-icon">&#128248;</span>
+        <span>&#1603;&#1575;&#1605;&#1610;&#1585;&#1575;</span>
+        <span class="role-desc">&#1610;&#1576;&#1579; &#1575;&#1604;&#1601;&#1610;&#1583;&#1610;&#1608;</span>
       </button>
-      <button class="role-btn viewer" onclick="join('viewer')">
-        <span class="role-icon">ðŸ–¥ï¸</span>
-        <span>Ù…Ø±Ø§Ù‚Ø¨Ø©</span>
-        <span class="role-desc">ÙŠØ´Ø§Ù‡Ø¯ Ø¬Ù…ÙŠØ¹ Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§Øª</span>
+      <button class="role-btn" onclick="join('viewer')">
+        <span class="role-icon">&#128251;</span>
+        <span>&#1605;&#1585;&#1575;&#1602;&#1576;&#1577;</span>
+        <span class="role-desc">&#1610;&#1588;&#1575;&#1607;&#1583; &#1575;&#1604;&#1603;&#1575;&#1605;&#1610;&#1585;&#1575;&#1578;</span>
       </button>
     </div>
   </div>
-
-  <div class="status-pill" id="splash-status">
+  <div class="status-pill">
     <div class="dot" id="splash-dot"></div>
-    <span id="splash-txt">Ø¬Ø§Ù‡Ø² Ù„Ù„Ø§ØªØµØ§Ù„</span>
+    <span id="splash-txt">&#1580;&#1575;&#1607;&#1586;</span>
   </div>
 </div>
 
-<!-- â•â•â• CAMERA â•â•â• -->
 <div id="camera" class="screen">
   <video id="cam-video" autoplay muted playsinline></video>
   <div class="cam-ui">
     <div class="cam-top">
-      <div class="cam-badge">
-        <div class="live-dot"></div>
-        <span id="cam-name-lbl">Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§</span>
-      </div>
+      <div class="cam-badge"><div class="live-dot"></div><span id="cam-name-lbl">&#1575;&#1604;&#1603;&#1575;&#1605;&#1610;&#1585;&#1575;</span></div>
       <div class="cam-info">
-        <div class="viewer-pill" id="viewers-lbl">0 Ù…Ø´Ø§Ù‡Ø¯</div>
-        <div class="conn-pill conn-no" id="conn-pill">ØºÙŠØ± Ù…ØªØµÙ„</div>
+        <div class="viewer-pill" id="viewers-lbl">0 &#1605;&#1588;&#1575;&#1607;&#1583;</div>
+        <div class="conn-pill conn-no" id="conn-pill">&#1594;&#1610;&#1585; &#1605;&#1578;&#1589;&#1604;</div>
       </div>
     </div>
     <div class="cam-center"></div>
     <div class="cam-bottom">
       <div class="cam-controls">
-        <button class="ctrl-btn" onclick="flipCam()">ðŸ”„ Ù‚Ù„Ø¨</button>
-        <button class="ctrl-btn" onclick="toggleTorch()" id="torch-btn">ðŸ”¦ ÙÙ„Ø§Ø´</button>
-        <button class="ctrl-btn danger" onclick="leave()">â† Ø®Ø±ÙˆØ¬</button>
+        <button class="ctrl-btn" onclick="flipCam()">&#128260; &#1602;&#1604;&#1576;</button>
+        <button class="ctrl-btn" onclick="toggleTorch()" id="torch-btn">&#128294; &#1601;&#1604;&#1575;&#1588;</button>
+        <button class="ctrl-btn danger" onclick="leave()">&#8592; &#1582;&#1585;&#1608;&#1580;</button>
       </div>
-      <div class="cam-status-txt" id="cam-status-txt">Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø§ØªØµØ§Ù„...</div>
+      <div class="cam-status-txt" id="cam-status-txt">&#1580;&#1575;&#1585;&#1610; &#1575;&#1604;&#1575;&#1578;&#1589;&#1575;&#1604;...</div>
     </div>
   </div>
 </div>
 
-<!-- â•â•â• VIEWER â•â•â• -->
 <div id="viewer" class="screen">
   <div class="v-header">
     <div class="v-title">
-      <div class="v-title-dot" id="v-dot" style="background:var(--muted);animation:none"></div>
-      Ù„ÙˆØ­Ø© Ø§Ù„Ù…Ø±Ø§Ù‚Ø¨Ø©
+      <div class="v-title-dot" id="v-dot"></div>
+      &#1604;&#1608;&#1581;&#1577; &#1575;&#1604;&#1605;&#1585;&#1575;&#1602;&#1576;&#1577;
     </div>
     <div class="v-actions">
-      <button class="hdr-btn" id="cam-count-btn">0 ÙƒØ§Ù…ÙŠØ±Ø§</button>
-      <button class="hdr-btn" onclick="copyLink()">ðŸ”— Ø±Ø§Ø¨Ø·</button>
-      <button class="hdr-btn" onclick="leave()">â† Ø®Ø±ÙˆØ¬</button>
+      <button class="hdr-btn" id="cam-count-btn">0 &#1603;&#1575;&#1605;&#1610;&#1585;&#1575;</button>
+      <button class="hdr-btn" onclick="copyLink()">&#128279; &#1585;&#1575;&#1576;&#1591;</button>
+      <button class="hdr-btn" onclick="leave()">&#8592; &#1582;&#1585;&#1608;&#1580;</button>
     </div>
   </div>
-
   <div class="v-body">
     <div class="grid" id="cams-grid">
       <div class="empty" id="empty-state">
-        <div class="empty-icon">ðŸ“¡</div>
-        <div class="empty-txt">ÙÙŠ Ø§Ù†ØªØ¸Ø§Ø± Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§Øª...<br>Ø§ÙØªØ­ Ø§Ù„Ø±Ø§Ø¨Ø· Ø¹Ù„Ù‰ Ù‡Ø§ØªÙ Ø¢Ø®Ø± ÙˆØ§Ø®ØªØ± "ÙƒØ§Ù…ÙŠØ±Ø§"</div>
+        <div class="empty-icon">&#128225;</div>
+        <div class="empty-txt">&#1601;&#1610; &#1575;&#1606;&#1578;&#1592;&#1575;&#1585; &#1575;&#1604;&#1603;&#1575;&#1605;&#1610;&#1585;&#1575;&#1578;...</div>
       </div>
     </div>
   </div>
-
   <div class="log-section">
-    <div class="log-hdr">ðŸ“‹ Ø³Ø¬Ù„ Ø§Ù„Ø­Ø±ÙƒØ©</div>
+    <div class="log-hdr">&#128203; &#1587;&#1580;&#1604; &#1575;&#1604;&#1581;&#1585;&#1603;&#1577;</div>
     <div class="log-body" id="motion-log">
-      <div class="log-empty-txt">Ù„Ø§ Ø£Ø­Ø¯Ø§Ø« Ø¨Ø¹Ø¯</div>
+      <div class="log-empty-txt">&#1604;&#1575; &#1571;&#1581;&#1583;&#1575;&#1579; &#1576;&#1593;&#1583;</div>
     </div>
   </div>
 </div>
 
-<!-- â•â•â• FULLSCREEN â•â•â• -->
 <div id="fs">
   <video id="fs-video" autoplay playsinline></video>
   <div class="fs-bar">
     <div class="fs-name" id="fs-name"></div>
-    <button class="fs-close" onclick="closeFs()">âœ• Ø¥ØºÙ„Ø§Ù‚</button>
+    <button class="fs-close" onclick="closeFs()">&#10005; &#1573;&#1594;&#1604;&#1575;&#1602;</button>
   </div>
 </div>
 
-<!-- â•â•â• INSTALL BANNER â•â•â• -->
 <div id="install-banner">
   <div class="install-txt">
-    Ø«Ø¨Ù‘Øª HomeCam Ø¹Ù„Ù‰ Ù‡Ø§ØªÙÙƒ
-    <span>ÙŠØ¹Ù…Ù„ ÙƒØªØ·Ø¨ÙŠÙ‚ Ø­Ù‚ÙŠÙ‚ÙŠ Ø¨Ø¯ÙˆÙ† Ù…ØªØµÙØ­</span>
+    &#1579;&#1576;&#1617;&#1578; HomeCam &#1593;&#1604;&#1609; &#1607;&#1575;&#1578;&#1601;&#1603;
+    <span>&#1610;&#1593;&#1605;&#1604; &#1603;&#1578;&#1591;&#1576;&#1610;&#1602; &#1581;&#1602;&#1610;&#1602;&#1610;</span>
   </div>
-  <button class="install-btn" onclick="installApp()">ØªØ«Ø¨ÙŠØª</button>
-  <button class="install-x" onclick="dismissInstall()">âœ•</button>
+  <button class="install-btn" onclick="installApp()">&#1578;&#1579;&#1576;&#1610;&#1578;</button>
+  <button class="install-x" onclick="dismissInstall()">&#10005;</button>
 </div>
 
-<!-- â•â•â• TOAST â•â•â• -->
 <div id="toast"></div>
 
 <script>
-// â”€â”€ CONFIG â”€â”€
-// REPLACE THIS after deploying to Railway:
-const WS_URL = location.protocol === 'https:'
-  ? 'wss://' + location.host
-  : 'ws://' + location.host;
-
-// Free STUN servers + free TURN via OpenRelay
-const ICE_SERVERS = [
-  { urls: 'stun:stun.l.google.com:19302' },
-  { urls: 'stun:stun1.l.google.com:19302' },
-  { urls: 'stun:openrelay.metered.ca:80' },
-  {
-    urls: 'turn:openrelay.metered.ca:80',
-    username: 'openrelayproject',
-    credential: 'openrelayproject'
-  },
-  {
-    urls: 'turn:openrelay.metered.ca:443',
-    username: 'openrelayproject',
-    credential: 'openrelayproject'
-  }
+var WS_URL = location.protocol === 'https:' ? 'wss://' + location.host : 'ws://' + location.host;
+var ICE = [
+  {urls:'stun:stun.l.google.com:19302'},
+  {urls:'stun:stun1.l.google.com:19302'},
+  {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+  {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'}
 ];
+var ws, myId, myRole, myName, myRoom;
+var localStream = null, facing = 'environment', torchOn = false;
+var peers = {}, tiles = {}, motionTimers = {}, installPrompt = null, reconnectTimer = null;
 
-// â”€â”€ STATE â”€â”€
-let ws, myId, myRole, myName, myRoom;
-let localStream = null, facing = 'environment', torchOn = false;
-const peers = {};
-const tiles = {};
-const motionTimers = {};
-let installPrompt = null;
-let reconnectTimer = null;
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(function(){});
 
-// â”€â”€ PWA â”€â”€
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
-}
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  installPrompt = e;
-  if (localStorage.getItem('install-dismissed') !== '1') {
-    document.getElementById('install-banner').classList.add('show');
-  }
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault(); installPrompt = e;
+  if (localStorage.getItem('install-dismissed') !== '1') document.getElementById('install-banner').classList.add('show');
 });
-function installApp() {
-  if (installPrompt) { installPrompt.prompt(); installPrompt = null; }
-  document.getElementById('install-banner').classList.remove('show');
-}
-function dismissInstall() {
-  localStorage.setItem('install-dismissed', '1');
-  document.getElementById('install-banner').classList.remove('show');
-}
+function installApp() { if (installPrompt) { installPrompt.prompt(); installPrompt = null; } document.getElementById('install-banner').classList.remove('show'); }
+function dismissInstall() { localStorage.setItem('install-dismissed','1'); document.getElementById('install-banner').classList.remove('show'); }
 
-// â”€â”€ KEEP SCREEN ON â”€â”€
-let wakeLock = null;
-async function keepAwake() {
-  try {
-    if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen');
-  } catch {}
-}
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && myRole === 'camera') keepAwake();
-});
-
-// â”€â”€ JOIN â”€â”€
 async function join(role) {
-  const name = document.getElementById('inp-name').value.trim() || (role === 'camera' ? 'ÙƒØ§Ù…ÙŠØ±Ø§' : 'Ù…Ø±Ø§Ù‚Ø¨Ø©');
-  const room = document.getElementById('inp-room').value.trim() || 'default';
+  var name = document.getElementById('inp-name').value.trim() || (role === 'camera' ? 'Camera' : 'Viewer');
+  var room = document.getElementById('inp-room').value.trim() || 'default';
   myRole = role; myName = name; myRoom = room;
-
-  setSplashStatus('connecting', 'Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø§ØªØµØ§Ù„...');
-
-  if (role === 'camera') {
-    await startStream();
-    showScreen('camera');
-    document.getElementById('cam-name-lbl').textContent = name;
-    keepAwake();
-  } else {
-    showScreen('viewer');
-  }
-
+  if (role === 'camera') { await startStream(); showScreen('camera'); document.getElementById('cam-name-lbl').textContent = name; }
+  else { showScreen('viewer'); }
   connectWS();
 }
 
-// â”€â”€ WEBSOCKET â”€â”€
 function connectWS() {
-  if (ws) { try { ws.close(); } catch {} }
+  if (ws) { try { ws.close(); } catch(e){} }
   ws = new WebSocket(WS_URL);
-
-  ws.onopen = () => {
-    ws.send(JSON.stringify({ type: 'register', role: myRole, name: myName, room: myRoom }));
-    if (myRole === 'camera') setCamStatus(true);
-  };
-
-  ws.onmessage = e => handleMsg(JSON.parse(e.data));
-
-  ws.onclose = () => {
-    if (myRole === 'camera') setCamStatus(false);
-    clearTimeout(reconnectTimer);
-    reconnectTimer = setTimeout(connectWS, 3000);
-  };
-
-  ws.onerror = () => ws.close();
+  ws.onopen = function() { ws.send(JSON.stringify({type:'register',role:myRole,name:myName,room:myRoom})); if (myRole==='camera') setCamStatus(true); };
+  ws.onmessage = function(e) { handleMsg(JSON.parse(e.data)); };
+  ws.onclose = function() { if (myRole==='camera') setCamStatus(false); clearTimeout(reconnectTimer); reconnectTimer = setTimeout(connectWS,3000); };
+  ws.onerror = function() { ws.close(); };
 }
-
-function send(msg) {
-  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(msg));
-}
+function send(msg) { if (ws && ws.readyState===1) ws.send(JSON.stringify(msg)); }
 
 async function handleMsg(msg) {
-  switch (msg.type) {
-    case 'id':
-      myId = msg.id;
-      break;
-
-    case 'peer-list':
-      if (myRole === 'viewer') {
-        const cams = msg.peers.filter(p => p.role === 'camera');
-        updateCamCount(cams.length);
-        for (const cam of cams) {
-          if (!peers[cam.id]) await connectToCam(cam);
-        }
-        const camIds = cams.map(c => c.id);
-        for (const id in tiles) {
-          if (!camIds.includes(id)) removeTile(id);
-        }
-      }
-      if (myRole === 'camera') {
-        const viewers = msg.peers.filter(p => p.role === 'viewer').length;
-        document.getElementById('viewers-lbl').textContent = viewers + ' Ù…Ø´Ø§Ù‡Ø¯';
-      }
-      break;
-
-    case 'offer':
-      if (myRole === 'camera') await handleOffer(msg);
-      break;
-
-    case 'answer':
-      if (peers[msg.from]) await peers[msg.from].setRemoteDescription(msg.sdp).catch(() => {});
-      break;
-
-    case 'ice':
-      if (peers[msg.from]) peers[msg.from].addIceCandidate(msg.candidate).catch(() => {});
-      break;
+  if (msg.type==='id') { myId=msg.id; }
+  else if (msg.type==='peer-list') {
+    if (myRole==='viewer') {
+      var cams = msg.peers.filter(function(p){return p.role==='camera';});
+      updateCamCount(cams.length);
+      for (var i=0;i<cams.length;i++) if (!peers[cams[i].id]) await connectToCam(cams[i]);
+      var camIds = cams.map(function(c){return c.id;});
+      for (var id in tiles) if (!camIds.includes(id)) removeTile(id);
+    }
+    if (myRole==='camera') {
+      var viewers = msg.peers.filter(function(p){return p.role==='viewer';}).length;
+      document.getElementById('viewers-lbl').textContent = viewers + ' viewer';
+    }
   }
+  else if (msg.type==='offer' && myRole==='camera') { await handleOffer(msg); }
+  else if (msg.type==='answer') { if (peers[msg.from]) await peers[msg.from].setRemoteDescription(msg.sdp).catch(function(){}); }
+  else if (msg.type==='ice') { if (peers[msg.from]) peers[msg.from].addIceCandidate(msg.candidate).catch(function(){}); }
 }
 
-// â”€â”€ CAMERA â”€â”€
 async function startStream() {
   try {
-    if (localStream) localStream.getTracks().forEach(t => t.stop());
-    localStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: facing, width: { ideal: 1280 }, height: { ideal: 720 } },
-      audio: false
-    });
+    if (localStream) localStream.getTracks().forEach(function(t){t.stop();});
+    localStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1280},height:{ideal:720}},audio:false});
     document.getElementById('cam-video').srcObject = localStream;
-  } catch (e) {
-    toast('ØªØ¹Ø°Ù‘Ø± Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§: ' + e.message);
-  }
+  } catch(e) { toast('Camera error: '+e.message); }
 }
-
 async function flipCam() {
-  facing = facing === 'environment' ? 'user' : 'environment';
+  facing = facing==='environment'?'user':'environment';
   await startStream();
-  for (const id in peers) {
-    const sender = peers[id].getSenders().find(s => s.track?.kind === 'video');
-    if (sender && localStream) sender.replaceTrack(localStream.getVideoTracks()[0]).catch(() => {});
+  for (var id in peers) {
+    var s = peers[id].getSenders().find(function(s){return s.track&&s.track.kind==='video';});
+    if (s&&localStream) s.replaceTrack(localStream.getVideoTracks()[0]).catch(function(){});
   }
-  toast(facing === 'user' ? 'Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§ Ø§Ù„Ø£Ù…Ø§Ù…ÙŠØ©' : 'Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§ Ø§Ù„Ø®Ù„ÙÙŠØ©');
 }
-
 async function toggleTorch() {
   if (!localStream) return;
-  const track = localStream.getVideoTracks()[0];
-  try {
-    torchOn = !torchOn;
-    await track.applyConstraints({ advanced: [{ torch: torchOn }] });
-    document.getElementById('torch-btn').textContent = torchOn ? 'ðŸ”¦ ÙÙ„Ø§Ø´ âœ“' : 'ðŸ”¦ ÙÙ„Ø§Ø´';
-  } catch { toast('Ø§Ù„ÙÙ„Ø§Ø´ ØºÙŠØ± Ù…ØªØ§Ø­'); torchOn = false; }
+  var track = localStream.getVideoTracks()[0];
+  try { torchOn=!torchOn; await track.applyConstraints({advanced:[{torch:torchOn}]}); document.getElementById('torch-btn').textContent = torchOn?'&#128294; ON':'&#128294; Flash'; }
+  catch(e) { toast('Flash not available'); torchOn=false; }
 }
-
 async function handleOffer(msg) {
-  const pc = newPC(msg.from);
-  if (localStream) localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+  var pc = newPC(msg.from);
+  if (localStream) localStream.getTracks().forEach(function(t){pc.addTrack(t,localStream);});
   await pc.setRemoteDescription(msg.sdp);
-  const answer = await pc.createAnswer();
-  await pc.setLocalDescription(answer);
-  send({ type: 'answer', to: msg.from, sdp: pc.localDescription });
+  var ans = await pc.createAnswer();
+  await pc.setLocalDescription(ans);
+  send({type:'answer',to:msg.from,sdp:pc.localDescription});
 }
-
-// â”€â”€ VIEWER â”€â”€
 async function connectToCam(cam) {
   if (tiles[cam.id]) return;
   addTile(cam);
-
-  const pc = newPC(cam.id);
-  pc.ontrack = e => {
-    const tile = tiles[cam.id];
-    if (!tile) return;
+  var pc = newPC(cam.id);
+  pc.ontrack = function(e) {
+    var tile = tiles[cam.id]; if (!tile) return;
     tile.video.srcObject = e.streams[0];
-    tile.badge.textContent = 'Ù…Ø¨Ø§Ø´Ø±';
-    tile.badge.className = 'tile-badge b-live';
-    startMotion(cam.id, tile.video, cam.name || cam.id);
+    tile.badge.textContent = 'LIVE'; tile.badge.className='tile-badge b-live';
+    startMotion(cam.id,tile.video,cam.name||cam.id);
   };
-  pc.onconnectionstatechange = () => {
-    const tile = tiles[cam.id];
-    if (!tile) return;
-    const s = pc.connectionState;
-    if (s === 'connected') { tile.badge.textContent = 'Ù…Ø¨Ø§Ø´Ø±'; tile.badge.className = 'tile-badge b-live'; }
-    else if (s === 'failed' || s === 'disconnected') { tile.badge.textContent = 'Ù…Ù†Ù‚Ø·Ø¹'; tile.badge.className = 'tile-badge b-off'; }
+  pc.onconnectionstatechange = function() {
+    var tile=tiles[cam.id]; if (!tile) return;
+    if (pc.connectionState==='connected'){tile.badge.textContent='LIVE';tile.badge.className='tile-badge b-live';}
+    else if (pc.connectionState==='failed'||pc.connectionState==='disconnected'){tile.badge.textContent='OFF';tile.badge.className='tile-badge b-off';}
   };
-
-  const offer = await pc.createOffer({ offerToReceiveVideo: true });
+  var offer = await pc.createOffer({offerToReceiveVideo:true});
   await pc.setLocalDescription(offer);
-  send({ type: 'offer', to: cam.id, sdp: pc.localDescription });
+  send({type:'offer',to:cam.id,sdp:pc.localDescription});
 }
-
-function newPC(peerId) {
-  const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
-  peers[peerId] = pc;
-  pc.onicecandidate = e => {
-    if (e.candidate) send({ type: 'ice', to: peerId, candidate: e.candidate });
-  };
+function newPC(pid) {
+  var pc = new RTCPeerConnection({iceServers:ICE});
+  peers[pid] = pc;
+  pc.onicecandidate = function(e) { if (e.candidate) send({type:'ice',to:pid,candidate:e.candidate}); };
   return pc;
 }
-
 function addTile(cam) {
-  const grid = document.getElementById('cams-grid');
-  document.getElementById('empty-state')?.remove();
-
-  const tile = document.createElement('div');
-  tile.className = 'cam-tile';
-  tile.id = 'tile-' + cam.id;
-  tile.onclick = () => openFs(cam.id, cam.name || cam.id);
-
-  const wrap = document.createElement('div');
-  wrap.className = 'tile-video-wrap';
-
-  const motionEl = document.createElement('div');
-  motionEl.className = 'tile-motion';
-  motionEl.textContent = 'âš  Ø­Ø±ÙƒØ©';
-
-  const fsHint = document.createElement('div');
-  fsHint.className = 'tile-fs';
-  fsHint.textContent = 'â›¶ Ø´Ø§Ø´Ø© ÙƒØ§Ù…Ù„Ø©';
-
-  const vid = document.createElement('video');
-  vid.autoplay = true; vid.playsInline = true; vid.muted = true;
-
-  wrap.appendChild(motionEl);
-  wrap.appendChild(fsHint);
-  wrap.appendChild(vid);
-
-  const footer = document.createElement('div');
-  footer.className = 'tile-footer';
-
-  const name = document.createElement('span');
-  name.className = 'tile-name';
-  name.textContent = cam.name || cam.id;
-
-  const badge = document.createElement('span');
-  badge.className = 'tile-badge b-conn';
-  badge.textContent = 'Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø§ØªØµØ§Ù„...';
-
-  footer.appendChild(name);
-  footer.appendChild(badge);
-  tile.appendChild(wrap);
-  tile.appendChild(footer);
-  grid.appendChild(tile);
-
-  tiles[cam.id] = { el: tile, video: vid, badge, motion: motionEl, name: cam.name || cam.id };
+  var grid=document.getElementById('cams-grid');
+  var emp=document.getElementById('empty-state'); if(emp) emp.remove();
+  var tile=document.createElement('div'); tile.className='cam-tile'; tile.id='tile-'+cam.id;
+  tile.onclick=function(){openFs(cam.id,cam.name||cam.id);};
+  var wrap=document.createElement('div'); wrap.className='tile-video-wrap';
+  var mot=document.createElement('div'); mot.className='tile-motion'; mot.textContent='MOTION';
+  var vid=document.createElement('video'); vid.autoplay=true; vid.playsInline=true; vid.muted=true;
+  wrap.appendChild(mot); wrap.appendChild(vid);
+  var footer=document.createElement('div'); footer.className='tile-footer';
+  var nm=document.createElement('span'); nm.className='tile-name'; nm.textContent=cam.name||cam.id;
+  var badge=document.createElement('span'); badge.className='tile-badge b-conn'; badge.textContent='Connecting...';
+  footer.appendChild(nm); footer.appendChild(badge);
+  tile.appendChild(wrap); tile.appendChild(footer); grid.appendChild(tile);
+  tiles[cam.id]={el:tile,video:vid,badge:badge,motion:mot,name:cam.name||cam.id};
 }
-
 function removeTile(id) {
-  tiles[id]?.el.remove();
-  delete tiles[id];
-  if (peers[id]) { peers[id].close(); delete peers[id]; }
-  clearInterval(motionTimers[id]);
-  delete motionTimers[id];
-
-  if (!document.querySelectorAll('.cam-tile').length) {
-    const grid = document.getElementById('cams-grid');
-    const empty = document.createElement('div');
-    empty.className = 'empty'; empty.id = 'empty-state';
-    empty.innerHTML = '<div class="empty-icon">ðŸ“¡</div><div class="empty-txt">ÙÙŠ Ø§Ù†ØªØ¸Ø§Ø± Ø§Ù„ÙƒØ§Ù…ÙŠØ±Ø§Øª...<br>Ø§ÙØªØ­ Ø§Ù„Ø±Ø§Ø¨Ø· Ø¹Ù„Ù‰ Ù‡Ø§ØªÙ Ø¢Ø®Ø± ÙˆØ§Ø®ØªØ± "ÙƒØ§Ù…ÙŠØ±Ø§"</div>';
-    grid.appendChild(empty);
-  }
+  if(tiles[id]) tiles[id].el.remove(); delete tiles[id];
+  if(peers[id]){peers[id].close();delete peers[id];}
+  clearInterval(motionTimers[id]); delete motionTimers[id];
+  if(!document.querySelectorAll('.cam-tile').length){var g=document.getElementById('cams-grid');var e=document.createElement('div');e.className='empty';e.id='empty-state';e.innerHTML='<div class="empty-icon">&#128225;</div><div class="empty-txt">Waiting for cameras...</div>';g.appendChild(e);}
 }
-
-// â”€â”€ MOTION â”€â”€
-function startMotion(id, vid, name) {
-  const c = document.createElement('canvas');
-  c.width = 60; c.height = 45;
-  const ctx = c.getContext('2d');
-  let prev = null;
+function startMotion(id,vid,name) {
+  var c=document.createElement('canvas'); c.width=60;c.height=45;
+  var ctx=c.getContext('2d'); var prev=null;
   clearInterval(motionTimers[id]);
-  motionTimers[id] = setInterval(() => {
-    if (!tiles[id]) { clearInterval(motionTimers[id]); return; }
-    try {
-      ctx.drawImage(vid, 0, 0, 60, 45);
-      const cur = ctx.getImageData(0, 0, 60, 45).data;
-      if (prev) {
-        let diff = 0;
-        for (let i = 0; i < cur.length; i += 4) diff += Math.abs(cur[i] - prev[i]);
-        const moved = diff / (60 * 45) > 20;
-        tiles[id]?.motion.classList.toggle('show', moved);
-        if (moved) addLog(name);
-      }
-      prev = cur;
-    } catch {}
-  }, 2500);
+  motionTimers[id]=setInterval(function(){
+    if(!tiles[id]){clearInterval(motionTimers[id]);return;}
+    try{ctx.drawImage(vid,0,0,60,45);var cur=ctx.getImageData(0,0,60,45).data;
+    if(prev){var diff=0;for(var i=0;i<cur.length;i+=4)diff+=Math.abs(cur[i]-prev[i]);var moved=diff/(60*45)>20;if(tiles[id])tiles[id].motion.classList.toggle('show',moved);if(moved)addLog(name);}
+    prev=cur;}catch(e){}
+  },2500);
 }
-
 function addLog(name) {
-  const log = document.getElementById('motion-log');
-  log.querySelector('.log-empty-txt')?.remove();
-  const now = new Date().toLocaleTimeString('ar');
-  const row = document.createElement('div');
-  row.className = 'log-row';
-  row.innerHTML = `<span class="log-t">${now}</span><span>${name} â€” Ø­Ø±ÙƒØ©</span>`;
-  log.prepend(row);
-  if (log.children.length > 40) log.lastChild.remove();
+  var log=document.getElementById('motion-log');
+  var emp=log.querySelector('.log-empty-txt'); if(emp) emp.remove();
+  var now=new Date().toLocaleTimeString();
+  var row=document.createElement('div'); row.className='log-row';
+  row.innerHTML='<span class="log-t">'+now+'</span><span>'+name+' - Motion</span>';
+  log.prepend(row); if(log.children.length>40) log.lastChild.remove();
 }
-
-// â”€â”€ UI HELPERS â”€â”€
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function openFs(id, name) {
-  const tile = tiles[id];
-  if (!tile?.video.srcObject) return;
-  document.getElementById('fs-video').srcObject = tile.video.srcObject;
-  document.getElementById('fs-name').textContent = name;
-  document.getElementById('fs').classList.add('active');
-  document.getElementById('fs').style.display = 'flex';
-}
-function closeFs() {
-  document.getElementById('fs').classList.remove('active');
-  document.getElementById('fs').style.display = 'none';
-  document.getElementById('fs-video').srcObject = null;
-}
-
-function updateCamCount(n) {
-  document.getElementById('cam-count-btn').textContent = n + ' ÙƒØ§Ù…ÙŠØ±Ø§';
-  const dot = document.getElementById('v-dot');
-  if (n > 0) { dot.style.background = 'var(--green)'; dot.style.animation = 'blink 1.4s infinite'; }
-  else { dot.style.background = 'var(--muted)'; dot.style.animation = 'none'; }
-}
-
-function setCamStatus(connected) {
-  const pill = document.getElementById('conn-pill');
-  if (connected) { pill.textContent = 'Ù…ØªØµÙ„'; pill.className = 'conn-pill conn-ok'; }
-  else { pill.textContent = 'ØºÙŠØ± Ù…ØªØµÙ„'; pill.className = 'conn-pill conn-no'; }
-  document.getElementById('cam-status-txt').textContent = connected ? 'ÙŠØ¨Ø« Ù…Ø¨Ø§Ø´Ø±Ø© Ø¹Ø¨Ø± Ø§Ù„Ø¥Ù†ØªØ±Ù†Øª' : 'Ø¬Ø§Ø±ÙŠ Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„Ø§ØªØµØ§Ù„...';
-}
-
-function setSplashStatus(state, txt) {
-  const dot = document.getElementById('splash-dot');
-  dot.className = 'dot ' + (state === 'connecting' ? '' : state === 'ok' ? 'green' : 'red');
-  document.getElementById('splash-txt').textContent = txt;
-}
-
-function copyLink() {
-  const link = location.href;
-  navigator.clipboard?.writeText(link).then(() => toast('ØªÙ… Ù†Ø³Ø® Ø§Ù„Ø±Ø§Ø¨Ø· âœ“')).catch(() => {
-    prompt('Ø§Ù†Ø³Ø® Ù‡Ø°Ø§ Ø§Ù„Ø±Ø§Ø¨Ø·:', link);
-  });
-}
-
-function leave() {
-  clearTimeout(reconnectTimer);
-  if (localStream) localStream.getTracks().forEach(t => t.stop());
-  for (const id in peers) { peers[id].close(); delete peers[id]; }
-  if (ws) { ws.onclose = null; ws.close(); }
-  location.reload();
-}
-
-function toast(msg, dur = 2500) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toast._t);
-  toast._t = setTimeout(() => el.classList.remove('show'), dur);
-}
+function showScreen(id) { document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');}); document.getElementById(id).classList.add('active'); }
+function openFs(id,name) { var t=tiles[id]; if(!t||!t.video.srcObject) return; document.getElementById('fs-video').srcObject=t.video.srcObject; document.getElementById('fs-name').textContent=name; document.getElementById('fs').classList.add('active'); document.getElementById('fs').style.display='flex'; }
+function closeFs() { document.getElementById('fs').classList.remove('active'); document.getElementById('fs').style.display='none'; document.getElementById('fs-video').srcObject=null; }
+function updateCamCount(n) { document.getElementById('cam-count-btn').textContent=n+' cam'; var d=document.getElementById('v-dot'); d.style.background=n>0?'var(--green)':'var(--muted)'; }
+function setCamStatus(ok) { var p=document.getElementById('conn-pill'); if(ok){p.textContent='Connected';p.className='conn-pill conn-ok';}else{p.textContent='Disconnected';p.className='conn-pill conn-no';} document.getElementById('cam-status-txt').textContent=ok?'Streaming live':'Reconnecting...'; }
+function copyLink() { navigator.clipboard&&navigator.clipboard.writeText(location.href).then(function(){toast('Link copied!');}).catch(function(){prompt('Copy:',location.href);}); }
+function leave() { clearTimeout(reconnectTimer); if(localStream) localStream.getTracks().forEach(function(t){t.stop();}); for(var id in peers){peers[id].close();delete peers[id];} if(ws){ws.onclose=null;ws.close();} location.reload(); }
+function toast(msg,dur) { dur=dur||2500; var el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(function(){el.classList.remove('show');},dur); }
 </script>
 </body>
 </html>
-
-
